@@ -1,6 +1,6 @@
 # chemception-like
 
-this is an one code for reproduce this study:
+this is a on script to reproduce this study:
 
 https://www.wildcardconsulting.dk/useful-information/learn-how-to-teach-your-computer-to-see-chemistry-free-chemception-models-with-rdkit-and-keras/
 
