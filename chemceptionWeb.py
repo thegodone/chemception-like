@@ -4,7 +4,6 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 import pandas as pd
 import numpy as np
-#from matplotlib import pyplot as plt
 import keras
 from keras.models import Sequential, Model
 from keras.layers import Conv2D, MaxPooling2D, Input, GlobalMaxPooling2D
@@ -17,7 +16,7 @@ from sklearn.preprocessing import RobustScaler
 print("Keras: %s"%keras.__version__)
 print("RDKit: %s"%rdkit.__version__)
 
-data = pd.read_hdf("Sutherland_DHFR.h5","data")
+data = pd.read_hdf("data/Sutherland_DHFR.h5","data")
 data["mol"] = data["smiles"].apply(Chem.MolFromSmiles)
 
 def chemcepterize_mol(mol, embed=20.0, res=0.5):
@@ -150,31 +149,15 @@ history = model.fit_generator(g,
                               callbacks=[reduce_lr])
 
 
-name = "Chemception_std_notebook_demo"
-model.save("%s.h5"%name)
+name = "Chemception_like_demo"
+model.save("data/%s.h5"%name)
  
 hist = history.history
 import pickle
-pickle.dump(hist, file("%s_history.pickle"%name,"w"))
-#from keras.model import load_model
-#model = load_model("%s.h5"%name)
-
-
-#for label in ['val_loss','loss']:
-#    plt.plot(hist[label], label = label)
-#plt.legend()
-#plt.yscale("log")
-#plt.xlabel("Epochs")
-#plt.ylabel("Loss/lr")
+pickle.dump(hist, file("data/%s_history.pickle"%name,"w"))
 
 y_pred_t = rbs.inverse_transform(model.predict(X_train))
 y_pred = rbs.inverse_transform(model.predict(X_test))
-#plt.scatter(np.log(y_train), y_pred_t, label="Train")
-#plt.scatter(np.log(y_test), y_pred, label="Test")
-#plt.xlabel("log(PC_uM)")
-#plt.ylabel("predicted")
-#plt.plot([-10,6],[-10,6])
-#plt.legend()
 
 
 corr2 = np.corrcoef(np.log(y_test).reshape(1,-1), y_pred.reshape(1,-1))[0][1]**2
